@@ -1,0 +1,34 @@
+cat > .gitignore <<'EOF'
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+
+# Lambda packages
+*.zip
+build/
+dist/
+
+# macOS
+.DS_Store
+
+# Local files
+*.log
+.env.local
+EOF
