@@ -1,0 +1,39 @@
+name: IaC Security Scan
+
+"on":
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+      - ".github/workflows/iac-security-scan.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+      - ".github/workflows/iac-security-scan.yml"
+
+  workflow_dispatch:
+
+jobs:
+  trivy-iac-scan:
+    name: Run Trivy IaC Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy Terraform scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: infra
+          format: table
+          exit-code: "0"
+          severity: HIGH,CRITICAL
