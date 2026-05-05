@@ -42,8 +42,15 @@ resource "aws_lambda_function" "invoke_bedrock" {
   runtime          = "python3.12"
   filename         = data.archive_file.invoke_bedrock.output_path
   source_code_hash = data.archive_file.invoke_bedrock.output_base64sha256
-  timeout          = 15
-  memory_size      = 128
+  timeout          = 30
+  memory_size      = 256
+
+  environment {
+    variables = {
+      DEFAULT_MODEL_ID  = "amazon.nova-lite-v1:0"
+      USE_MOCK_FALLBACK = "true"
+    }
+  }
 
   tags = local.common_tags
 }

@@ -195,3 +195,35 @@ resource "aws_iam_role_policy_attachment" "step_functions_sns_publish" {
   role       = aws_iam_role.step_functions_exec.name
   policy_arn = aws_iam_policy.step_functions_sns_publish.arn
 }
+
+resource "aws_iam_policy" "lambda_bedrock_invoke" {
+  name        = "${local.name_prefix}-lambda-bedrock-invoke"
+  description = "Allows the AI Release Gate model invocation Lambda to call Amazon Bedrock Runtime."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowBedrockConverseAndInvoke"
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:Converse"
+        ]
+        Resource = [
+          "arn:aws:bedrock:${var.aws_region}::foundation-model/amazon.nova-lite-v1:0",
+          "arn:aws:bedrock:${var.aws_region}::foundation-model/amazon.nova-micro-v1:0",
+          "arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+          "arn:aws:bedrock:*:*:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+        ]
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_bedrock_invoke" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.lambda_bedrock_invoke.arn
+}
