@@ -22,7 +22,7 @@ jobs:
       contents: read
 
     env:
-      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_REGION: us-east-1
       INPUT_BUCKET_NAME: ${{ vars.INPUT_BUCKET_NAME }}
       RESULTS_TABLE_NAME: ${{ vars.RESULTS_TABLE_NAME }}
       CONTRACT_FILE: ${{ github.event.inputs.contract_file || 'contracts/safe_release_contract.json' }}
@@ -36,7 +36,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AI_RELEASE_GATE_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AI_RELEASE_GATE_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-1
 
       - name: Set up Python
         uses: actions/setup-python@v5
