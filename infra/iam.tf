@@ -169,3 +169,29 @@ resource "aws_iam_role_policy_attachment" "eventbridge_start_stepfunctions" {
   role       = aws_iam_role.eventbridge_exec.name
   policy_arn = aws_iam_policy.eventbridge_start_stepfunctions.arn
 }
+
+resource "aws_iam_policy" "step_functions_sns_publish" {
+  name        = "${local.name_prefix}-step-functions-sns-publish"
+  description = "Allows Step Functions to publish blocked AI release alerts to SNS."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowPublishBlockedReleaseAlerts"
+        Effect = "Allow"
+        Action = [
+          "sns:Publish"
+        ]
+        Resource = aws_sns_topic.blocked_release.arn
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "step_functions_sns_publish" {
+  role       = aws_iam_role.step_functions_exec.name
+  policy_arn = aws_iam_policy.step_functions_sns_publish.arn
+}

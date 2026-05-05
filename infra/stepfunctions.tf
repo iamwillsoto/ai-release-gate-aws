@@ -3,7 +3,7 @@ resource "aws_sfn_state_machine" "release_gate" {
   role_arn = aws_iam_role.step_functions_exec.arn
 
   definition = jsonencode({
-    Comment = "AI Release Gate workflow for contract validation, model invocation, response evaluation, and result formatting."
+    Comment = "AI Release Gate workflow for contract validation, model invocation, response evaluation, result persistence, and blocked-release notification."
     StartAt = "ValidateContract"
 
     States = {
@@ -60,7 +60,7 @@ resource "aws_sfn_state_machine" "release_gate" {
           {
             Variable     = "$.release_decision"
             StringEquals = "BLOCKED"
-            Next         = "Blocked"
+            Next         = "PublishBlockedReleaseAlert"
           },
           {
             Variable     = "$.release_decision"
@@ -69,6 +69,17 @@ resource "aws_sfn_state_machine" "release_gate" {
           }
         ]
         Default = "ReviewRequired"
+      }
+
+      PublishBlockedReleaseAlert = {
+        Type     = "Task"
+        Resource = "arn:aws:states:::sns:publish"
+        Parameters = {
+          TopicArn    = aws_sns_topic.blocked_release.arn
+          Subject     = "AI Release Gate BLOCKED"
+          "Message.$" = "States.Format('AI Release Gate blocked a release. Test ID: {} | Test Name: {} | Severity: {} | Status: {} | Artifact: s3://{}/{}', $.test_id, $.test_name, $.severity, $.evaluation_status, $.artifact_bucket, $.artifact_key)"
+        }
+        Next = "Blocked"
       }
 
       Approved = {

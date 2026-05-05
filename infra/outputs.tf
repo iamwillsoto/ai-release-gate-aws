@@ -47,3 +47,13 @@ output "eventbridge_rule_name" {
   description = "EventBridge rule that starts the AI Release Gate from S3 contract uploads."
   value       = aws_cloudwatch_event_rule.s3_contract_upload.name
 }
+
+output "blocked_release_sns_topic_name" {
+  description = "SNS topic used for blocked AI release alerts."
+  value       = aws_sns_topic.blocked_release.name
+}
+
+output "blocked_release_sns_topic_arn" {
+  description = "SNS topic ARN used for blocked AI release alerts."
+  value       = aws_sns_topic.blocked_release.arn
+}
