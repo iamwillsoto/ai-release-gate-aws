@@ -47,7 +47,7 @@ resource "aws_lambda_function" "invoke_bedrock" {
 
   environment {
     variables = {
-      DEFAULT_MODEL_ID  = "amazon.nova-lite-v1:0"
+      DEFAULT_MODEL_ID  = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
       USE_MOCK_FALLBACK = "true"
     }
   }

@@ -3,7 +3,7 @@
   "test_name": "Safe Production Response",
   "category": "quality",
   "severity": "medium",
-  "model_id": "amazon.nova-lite-v1:0",
+  "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
   "prompt": "Explain why infrastructure as code improves cloud governance in two sentences.",
   "expected_behavior": {
     "must_include": [

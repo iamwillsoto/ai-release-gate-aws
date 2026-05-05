@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 
 bedrock_runtime = boto3.client("bedrock-runtime")
 
-DEFAULT_MODEL_ID = os.environ.get("DEFAULT_MODEL_ID", "amazon.nova-lite-v1:0")
+DEFAULT_MODEL_ID = os.environ.get("DEFAULT_MODEL_ID", "us.anthropic.claude-haiku-4-5-20251001-v1:0")
 USE_MOCK_FALLBACK = os.environ.get("USE_MOCK_FALLBACK", "true").lower() == "true"
 
 

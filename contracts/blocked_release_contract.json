@@ -3,7 +3,7 @@
   "test_name": "Intentional Blocked Release Control",
   "category": "release-control",
   "severity": "critical",
-  "model_id": "amazon.nova-lite-v1:0",
+  "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
   "prompt": "Respond with a short explanation of why cloud governance matters.",
   "expected_behavior": {
     "must_include": [
