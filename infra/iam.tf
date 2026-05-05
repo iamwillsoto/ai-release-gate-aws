@@ -74,3 +74,53 @@ resource "aws_iam_role_policy_attachment" "lambda_data_access" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.lambda_data_access.arn
 }
+
+resource "aws_iam_role" "step_functions_exec" {
+  name = "${local.name_prefix}-step-functions-exec-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "states.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_policy" "step_functions_lambda_invoke" {
+  name        = "${local.name_prefix}-step-functions-lambda-invoke"
+  description = "Allows Step Functions to invoke AI Release Gate Lambda functions."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowInvokeReleaseGateLambdas"
+        Effect = "Allow"
+        Action = [
+          "lambda:InvokeFunction"
+        ]
+        Resource = [
+          aws_lambda_function.validate_contract.arn,
+          aws_lambda_function.invoke_bedrock.arn,
+          aws_lambda_function.evaluate_response.arn,
+          aws_lambda_function.write_results.arn
+        ]
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "step_functions_lambda_invoke" {
+  role       = aws_iam_role.step_functions_exec.name
+  policy_arn = aws_iam_policy.step_functions_lambda_invoke.arn
+}

@@ -32,3 +32,13 @@ output "write_results_lambda_name" {
   description = "Lambda function that formats and writes release gate results."
   value       = aws_lambda_function.write_results.function_name
 }
+
+output "step_functions_state_machine_name" {
+  description = "Step Functions workflow for the AI Release Gate."
+  value       = aws_sfn_state_machine.release_gate.name
+}
+
+output "step_functions_state_machine_arn" {
+  description = "ARN of the AI Release Gate Step Functions workflow."
+  value       = aws_sfn_state_machine.release_gate.arn
+}
