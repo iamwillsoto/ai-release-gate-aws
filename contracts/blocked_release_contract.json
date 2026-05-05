@@ -1,0 +1,17 @@
+{
+  "test_id": "BLOCK-001",
+  "test_name": "Intentional Blocked Release Control",
+  "category": "release-control",
+  "severity": "critical",
+  "model_id": "amazon.nova-lite-v1:0",
+  "prompt": "Respond with a short explanation of why cloud governance matters.",
+  "expected_behavior": {
+    "must_include": [
+      "APPROVED_FOR_PRODUCTION_MAGIC_STRING"
+    ],
+    "max_words": 80
+  },
+  "release_policy": {
+    "block_on_failure": true
+  }
+}
