@@ -1,6 +1,6 @@
 name: AI Release Gate
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       contract_file:
