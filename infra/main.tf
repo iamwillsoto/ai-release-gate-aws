@@ -12,3 +12,4 @@ locals {
     Owner       = "iamwillsoto"
   }
 }
+data "aws_caller_identity" "current" {}
