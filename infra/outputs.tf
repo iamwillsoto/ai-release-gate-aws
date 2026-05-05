@@ -42,3 +42,8 @@ output "step_functions_state_machine_arn" {
   description = "ARN of the AI Release Gate Step Functions workflow."
   value       = aws_sfn_state_machine.release_gate.arn
 }
+
+output "eventbridge_rule_name" {
+  description = "EventBridge rule that starts the AI Release Gate from S3 contract uploads."
+  value       = aws_cloudwatch_event_rule.s3_contract_upload.name
+}

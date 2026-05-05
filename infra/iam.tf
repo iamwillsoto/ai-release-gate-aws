@@ -124,3 +124,48 @@ resource "aws_iam_role_policy_attachment" "step_functions_lambda_invoke" {
   role       = aws_iam_role.step_functions_exec.name
   policy_arn = aws_iam_policy.step_functions_lambda_invoke.arn
 }
+
+resource "aws_iam_role" "eventbridge_exec" {
+  name = "${local.name_prefix}-eventbridge-exec-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_policy" "eventbridge_start_stepfunctions" {
+  name        = "${local.name_prefix}-eventbridge-start-stepfunctions"
+  description = "Allows EventBridge to start the AI Release Gate Step Functions workflow."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowStartReleaseGateStateMachine"
+        Effect = "Allow"
+        Action = [
+          "states:StartExecution"
+        ]
+        Resource = aws_sfn_state_machine.release_gate.arn
+      }
+    ]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "eventbridge_start_stepfunctions" {
+  role       = aws_iam_role.eventbridge_exec.name
+  policy_arn = aws_iam_policy.eventbridge_start_stepfunctions.arn
+}

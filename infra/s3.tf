@@ -67,3 +67,8 @@ resource "aws_s3_bucket_versioning" "artifacts" {
     status = "Enabled"
   }
 }
+
+resource "aws_s3_bucket_notification" "input_eventbridge" {
+  bucket      = aws_s3_bucket.input.id
+  eventbridge = true
+}
